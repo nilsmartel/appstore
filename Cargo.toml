@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 druid = "0.3.2"              # Data-oriented Rust UI design toolkit.
+druid-derive = "0.1.1"       # derive impls for druid, a Rust UI toolkit.

@@ -10,6 +10,7 @@ name = "appstore"
 version = "0.1.0"
 dependencies = [
  "druid 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "druid-derive 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
