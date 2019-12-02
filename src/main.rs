@@ -1,28 +1,26 @@
 use druid::widget::{Button, Column, Label};
-use druid::Data;
-use druid::{AppLauncher, LocalizedString, Widget, WindowDesc};
+use druid::{AppLauncher, Widget, WindowDesc};
+use druid::{Data, Lens};
 
 fn main() {
-    let main_window = WindowDesc::new(sidebar_menu);
-    let data = SubMenuID::Discover;
+    let main_window = WindowDesc::new(app_store);
 
     AppLauncher::with_window(main_window)
-        .use_simple_logger()
-        .launch(data)
-        .expect("launch failed");
+        .launch(AppStoreState::default())
+        .expect("launching app failed");
+}
+
+fn app_store() -> impl Widget<AppStoreState> {
+    let mut col = Column::new();
+    let sidebar: dyn Widget<AppStoreState> =
+        druid::LensWrap::new(sidebar_menu, lenses::app_store_state::current_menu);
+    col.add_child(sidebar, 1.0);
+
+    col
 }
 
 fn sidebar_menu() -> impl Widget<SubMenuID> {
     let mut col = Column::new();
-
-    // The label text will be computed dynamically based on the current locale and count
-    //
-    let text = LocalizedString::new("something").with_arg("count", |data: &SubMenuID, _env| {
-        format!("current: {:#?}", data).into()
-    });
-
-    let label = Label::new(text);
-    col.add_child(label, 1.0);
 
     for id in (0..8).map(SubMenuID::from_u8) {
         let button = Button::new(
@@ -38,9 +36,17 @@ fn sidebar_menu() -> impl Widget<SubMenuID> {
     col
 }
 
-#[derive(Copy, Clone, Debug, Data)]
+#[derive(Copy, Clone, Debug, Data, Lens)]
 struct AppStoreState {
     current_menu: SubMenuID,
+}
+
+impl Default for AppStoreState {
+    fn default() -> Self {
+        AppStoreState {
+            current_menu: SubMenuID::Discover,
+        }
+    }
 }
 
 #[derive(Copy, Clone, Debug, Data, PartialEq)]
