@@ -1,6 +1,8 @@
-use druid::widget::{Button, Column, Label};
+use druid::widget::{Button, Column};
+use druid::Data;
+use druid::Lens;
+use druid::LensWrap;
 use druid::{AppLauncher, Widget, WindowDesc};
-use druid::{Data, Lens};
 
 fn main() {
     let main_window = WindowDesc::new(app_store);
@@ -12,9 +14,8 @@ fn main() {
 
 fn app_store() -> impl Widget<AppStoreState> {
     let mut col = Column::new();
-    let sidebar: dyn Widget<AppStoreState> =
-        druid::LensWrap::new(sidebar_menu, lenses::app_store_state::current_menu);
-    col.add_child(sidebar, 1.0);
+    let side = LensWrap::new(sidebar_menu(), lenses::app_store_state::current_menu);
+    col.add_child(side, 1.0);
 
     col
 }
