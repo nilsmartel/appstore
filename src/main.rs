@@ -1,4 +1,4 @@
-use druid::widget::{Button, Column};
+use druid::widget::{Button, Column, TextBox};
 use druid::Data;
 use druid::Lens;
 use druid::LensWrap;
@@ -14,6 +14,9 @@ fn main() {
 
 fn app_store() -> impl Widget<AppStoreState> {
     let mut col = Column::new();
+
+    let entry = LensWrap::new(TextBox::new(), lenses::app_store_state::search_term);
+    col.add_child(entry, 0.5);
     let side = LensWrap::new(sidebar_menu(), lenses::app_store_state::current_menu);
     col.add_child(side, 1.0);
 
@@ -37,14 +40,16 @@ fn sidebar_menu() -> impl Widget<SubMenuID> {
     col
 }
 
-#[derive(Copy, Clone, Debug, Data, Lens)]
+#[derive(Clone, Debug, Data, Lens)]
 struct AppStoreState {
+    search_term: String,
     current_menu: SubMenuID,
 }
 
 impl Default for AppStoreState {
     fn default() -> Self {
         AppStoreState {
+            search_term: String::new(),
             current_menu: SubMenuID::Discover,
         }
     }
