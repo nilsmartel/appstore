@@ -29,49 +29,10 @@ pub fn ui() -> impl Widget<AppStoreState> {
 }
 
 pub fn ui2() -> impl Widget<AppStoreState> {
-    let mut col = Column::new();
+    use crate::debug::string_hash_box;
+    let mut col = Row::new();
 
     col.add_child(ui(), 1.0);
-    col.add_child(
-        LensWrap::new(StringHashBox {}, lenses::app_store_state::sidebar),
-        1.0,
-    )
-}
-
-struct StringHashBox {}
-use druid::kurbo::Size;
-use druid::BaseState;
-use druid::BoxConstraints;
-use druid::Env;
-use druid::Event;
-use druid::EventCtx;
-use druid::LayoutCtx;
-use druid::PaintCtx;
-use druid::UpdateCtx;
-
-impl Widget<String> for StringHashBox {
-    fn paint(
-        &mut self,
-        paint_ctx: &mut PaintCtx,
-        base_state: &BaseState,
-        data: &String,
-        env: &Env,
-    ) {
-        unimplemented!()
-    }
-    fn layout(
-        &mut self,
-        ctx: &mut LayoutCtx,
-        bc: &BoxConstraints,
-        data: &String,
-        env: &Env,
-    ) -> Size {
-        unimplemented!()
-    }
-    fn event(&mut self, event: &Event, ctx: &mut EventCtx, data: &mut String, env: &Env) {
-        unimplemented!()
-    }
-    fn update(&mut self, ctx: &mut UpdateCtx, old_data: Option<&String>, data: &String, env: &Env) {
-        unimplemented!()
-    }
+    col.add_child(string_hash_box(), 0.2);
+    col
 }

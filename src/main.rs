@@ -1,4 +1,5 @@
 mod app_store;
+mod debug;
 mod sidebar;
 
 use app_store::AppStoreState;
