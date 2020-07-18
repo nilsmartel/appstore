@@ -1,7 +1,7 @@
 use crate::sidebar::sidebar;
 use crate::sidebar::SideBarState;
-use druid::widget::Column;
-use druid::widget::Row;
+use druid::lens;
+use druid::widget::Flex;
 use druid::Data;
 use druid::Lens;
 use druid::LensWrap;
@@ -9,7 +9,7 @@ use druid::Widget;
 
 #[derive(Clone, Debug, Data, Lens)]
 pub struct AppStoreState {
-    sidebar: SideBarState,
+    pub sidebar: SideBarState,
 }
 
 impl Default for AppStoreState {
@@ -21,18 +21,18 @@ impl Default for AppStoreState {
 }
 
 pub fn ui() -> impl Widget<AppStoreState> {
-    let mut row = Row::new();
+    let mut row = Flex::row();
 
-    let bar = LensWrap::new(sidebar(), lenses::app_store_state::sidebar);
-    row.add_child(bar, 1.0);
+    let bar = LensWrap::new(sidebar(), lens!(AppStoreState, sidebar));
+    row.add_child(bar);
     row
 }
 
 pub fn ui2() -> impl Widget<AppStoreState> {
     use crate::debug::string_hash_box;
-    let mut col = Row::new();
+    let mut col = Flex::row();
 
-    col.add_child(ui(), 1.0);
-    col.add_child(string_hash_box(), 0.2);
+    col.add_child(ui());
+    col.add_child(string_hash_box());
     col
 }

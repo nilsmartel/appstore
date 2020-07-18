@@ -2,18 +2,12 @@ pub struct StringHashBox {}
 use crate::{app_store, sidebar};
 
 use druid::{
-    kurbo::Size, piet::RenderContext, BaseState, BoxConstraints, Env, Event, EventCtx, LayoutCtx,
-    LensWrap, PaintCtx, UpdateCtx, Widget,
+    kurbo::Size, piet::RenderContext, BoxConstraints, Env, Event, EventCtx, LayoutCtx, LensWrap,
+    PaintCtx, UpdateCtx, Widget,
 };
 
 impl Widget<String> for StringHashBox {
-    fn paint(
-        &mut self,
-        paint_ctx: &mut PaintCtx,
-        base_state: &BaseState,
-        data: &String,
-        env: &Env,
-    ) {
+    fn paint(&mut self, paint_ctx: &mut PaintCtx, data: &String, env: &Env) {
         // Rectangles: the path for practical people
         let rect = druid::kurbo::Rect::from_origin_size((0., 0.), (64., 64.));
 
@@ -32,22 +26,28 @@ impl Widget<String> for StringHashBox {
     ) -> Size {
         Size::new(64.0, 64.0)
     }
-    fn event(&mut self, event: &Event, ctx: &mut EventCtx, data: &mut String, env: &Env) {
+    fn event(&mut self, ctx: &mut EventCtx, event: &Event, data: &mut String, env: &Env) {
         println!("\n[DEBUG]");
         println!("\n[event] {:?}", event);
     }
-
-    fn update(&mut self, ctx: &mut UpdateCtx, old_data: Option<&String>, data: &String, env: &Env) {
+    fn lifecycle(
+        &mut self,
+        ctx: &mut druid::LifeCycleCtx,
+        event: &druid::LifeCycle,
+        data: &String,
+        env: &Env,
+    ) {
     }
+    fn update(&mut self, ctx: &mut UpdateCtx, old_data: &String, data: &String, env: &Env) {}
 }
 
 pub fn string_hash_box() -> impl Widget<app_store::AppStoreState> {
     LensWrap::new(
         LensWrap::new(
             StringHashBox {},
-            sidebar::lenses::side_bar_state::search_term,
+            druid::lens!(sidebar::SideBarState, search_term),
         ),
-        app_store::lenses::app_store_state::sidebar,
+        druid::lens!(app_store::AppStoreState, sidebar),
     )
 }
 
